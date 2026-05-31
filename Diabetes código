@@ -1,0 +1,47 @@
+# Proyecto: Clasificación de Riesgo de Diabetes
+# Autores: David Sarmiento Alvarado y Abdiel Anaya Benítez
+
+
+import math
+
+# Dataset simulado: [edad, glucosa] -> riesgo (0 = bajo, 1 = alto)
+data = [
+    [25, 90, 0],
+    [45, 150, 1],
+    [30, 110, 0],
+    [50, 180, 1],
+    [35, 130, 0],
+    [60, 200, 1]
+]
+
+# Función sigmoide
+def sigmoid(z):
+    return 1 / (1 + math.exp(-z))
+
+# Inicialización de parámetros
+w1, w2, b = 0.0, 0.0, 0.0
+lr = 0.001   # tasa de aprendizaje
+epochs = 5000
+
+# Entrenamiento
+for _ in range(epochs):
+    for edad, glucosa, y in data:
+        z = w1*edad + w2*glucosa + b
+        pred = sigmoid(z)
+        error = y - pred
+        # Actualización de parámetros
+        w1 += lr * error * edad
+        w2 += lr * error * glucosa
+        b  += lr * error
+
+# Evaluación del modelo
+print("Parámetros entrenados:")
+print("w1 =", w1, "w2 =", w2, "b =", b)
+
+# Predicción para un nuevo paciente
+nuevo = [40, 160]  # edad, glucosa
+z = w1*nuevo[0] + w2*nuevo[1] + b
+pred = sigmoid(z)
+
+print("\nProbabilidad de riesgo:", pred)
+print("Clasificación:", "Alto riesgo" if pred >= 0.5 else "Bajo riesgo")
